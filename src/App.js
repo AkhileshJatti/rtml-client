@@ -1,23 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
+import FileViewMain from './Pages/rtmlMain';
 
+//, #FAE7A5), powder blue (#B6E1E7)
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="font-Lato bg-white">
+      <FileViewMain />
     </div>
   );
 }
