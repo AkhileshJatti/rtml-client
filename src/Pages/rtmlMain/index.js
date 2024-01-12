@@ -121,7 +121,7 @@ const FileViewMain = () => {
             <div>
                 <NavBar />
             </div>
-            <div className="flex flex-row">
+            <div className="flex flex-row h-[calc(100%-64px)]">
                 <FileSideBar files={files} setFiles={setFiles} buttonClick={buttonClick} openState={openState} setOpenState={setOpenState} deleteClick={deleteClick} />
                 <div className={`flex flex-row ${openState ? 'w-9/12' : 'w-full'}`}>
                     {!isLoading && (<FileView fileData={fileDataShow} />)}

@@ -14,11 +14,11 @@ const SearchBar = (props) => {
     const [tagView, setTagView] = useState(true);
 
     return (
-        <div className="flex flex-col h-screen bg-sideBG overflow-auto px-5">
+        <div className="flex flex-col bg-sideBG overflow-auto w-1/3 px-5">
             <div className="mx-auto pt-5">
                 <input type="checkbox" id="tags" name="showTags" onChange={showTagHandler} /> Show Tags
             </div>
-            <div className="h-32 py-10 px-5 flex flex-row">
+            <div className="h-32 py-10 px-5 flex flex-row mx-auto">
                 <input value={searchText} className="rounded-l-lg p-2" type="text" placeholder="Search" onChange={onTextChange} />
                 <button onClick={onClickSearch} className="w-auto flex justify-end items-center text-Navy p-2 hover:text-black bg-viewBG rounded-r-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

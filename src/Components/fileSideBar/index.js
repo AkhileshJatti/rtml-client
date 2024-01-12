@@ -34,7 +34,7 @@ const FileSideBar = (props) => {
                     {files.map((item) => {
                         return <FileButton fileName={item} key={item} buttonClick={buttonClick} deleteClick={deleteClick} />
                     })}
-                    <Upload handleFile={handleFile} openState={openState} />
+                    <div><Upload handleFile={handleFile} openState={openState} /></div>
                 </div>
 
             ) : (

@@ -5,7 +5,7 @@ const FileView = (props) => {
         fileData,
     } = props
     return (
-        <div className="h-screen container p-10 overflow-auto">
+        <div className="container p-10 overflow-auto">
             <div className="p-10 bg-viewBG flex flex-col text-center bg-opacity-40">
                 {fileData.length === 0 ? (
                     <>
