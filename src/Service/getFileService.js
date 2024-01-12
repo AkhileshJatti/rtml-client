@@ -1,12 +1,12 @@
 import axios from "axios"
 
 export const getAllFiles = async () => {
-    const res = await axios.get("http://0.0.0.0:8000/files")
+    const res = await axios.get("/files")
     return res.data
 }
 
 export const setFile = async (file_name) => {
-    const res = await axios.post(`http://0.0.0.0:8000/setfile/${file_name}`);
+    const res = await axios.post(`/setfile/${file_name}`);
     if (res.status === 200) {
         return true
     }
@@ -15,6 +15,6 @@ export const setFile = async (file_name) => {
 }
 
 export const getFileData = async (file_name) => {
-    const res = await axios.get(`http://0.0.0.0:8000/api/${file_name}`)
+    const res = await axios.get(`/api/${file_name}`)
     return res
 }
