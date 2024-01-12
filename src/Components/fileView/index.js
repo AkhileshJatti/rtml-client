@@ -3,14 +3,10 @@ import React from "react";
 const FileView = (props) => {
     const {
         fileData,
-        showTagHandler
     } = props
     return (
         <div className="h-screen container p-10 overflow-auto">
-            <div>
-                <input type="checkbox" id="tags" name="showTags" onChange={showTagHandler} /> Show Tags
-            </div>
-            <div className="p-10 bg-viewBG flex flex-col text-center">
+            <div className="p-10 bg-viewBG flex flex-col text-center bg-opacity-40">
                 {fileData.length === 0 ? (
                     <>
                         Please select a file from the sidebar

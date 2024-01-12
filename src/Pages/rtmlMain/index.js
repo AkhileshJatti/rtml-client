@@ -3,7 +3,7 @@ import FileSideBar from '../../Components/fileSideBar';
 import FileView from '../../Components/fileView';
 import NavBar from '../../Components/navbar';
 import SearchBar from "../../Components/searchBar"
-import { getAllFiles, getFileData, setFile } from "../../Service/getFileService"
+import { deleteFile, getAllFiles, getFileData, setFile } from "../../Service/getFileService"
 
 const FileViewMain = () => {
     const [files, setFiles] = useState([]);
@@ -59,6 +59,19 @@ const FileViewMain = () => {
         }
     }
 
+    const deleteClick = async (fileName) => {
+        setTags([])
+        setSearchText("")
+        setIsLoading(true)
+
+        const res = await deleteFile(fileName)
+        if (res.status === 200) {
+            setIsLoading(false)
+            const filesRes = await getAllFiles();
+            setFiles(filesRes.files)
+        }
+    }
+
     const onTextChange = (e) => {
         setSearchText(e.target.value)
     }
@@ -67,7 +80,8 @@ const FileViewMain = () => {
         setTags(fileData.tags.filter((item) => item.name.includes(searchText)))
     }
 
-    const onTagClick = () => {
+    const onTagClick = (name) => {
+        console.log("clicked",name)
         const temp = fileData?.data.split("\n");
         let tempFileDataShow = []
         let highLightItem = false
@@ -75,22 +89,22 @@ const FileViewMain = () => {
         temp.forEach((item, index) => {
             if (item.trim() !== "") {
                 if (reStart.test(item)) {
-                    if (item.includes(tags[0].name)) {
+                    if (item.includes(name)) {
                         highLightItem = true;
                         tagName.push({ name: item, id: index + 1 });
                     }
                 }
                 if (reEnd.test(item)) {
-                    if (item.includes(tags[0].name)) {
+                    if (item.includes(name)) {
                         highLightItem = false
                     }
                 }
                 if (!showTag) {
                     if (!reStart.test(item) && !reEnd.test(item)) {
-                        tempFileDataShow.push({ id: index+highLightItem, line: item, highLight: highLightItem })
+                        tempFileDataShow.push({ id: index + highLightItem, line: item, highLight: highLightItem })
                     }
                 } else {
-                    tempFileDataShow.push({ id: index+highLightItem, line: item, highLight: highLightItem })
+                    tempFileDataShow.push({ id: index + highLightItem, line: item, highLight: highLightItem })
                 }
             }
         })
@@ -102,16 +116,15 @@ const FileViewMain = () => {
         setShowTag(e.target.checked)
     }
 
-
     return (
         <>
             <div>
                 <NavBar />
             </div>
             <div className="flex flex-row">
-                <FileSideBar files={files} buttonClick={buttonClick} openState={openState} setOpenState={setOpenState} />
+                <FileSideBar files={files} setFiles={setFiles} buttonClick={buttonClick} openState={openState} setOpenState={setOpenState} deleteClick={deleteClick} />
                 <div className={`flex flex-row ${openState ? 'w-9/12' : 'w-full'}`}>
-                    {!isLoading && (<FileView fileData={fileDataShow} showTagHandler={showTagHandler} />)}
+                    {!isLoading && (<FileView fileData={fileDataShow} />)}
                     {isLoading && (
                         <div role="status" className="m-auto">
                             <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -122,7 +135,7 @@ const FileViewMain = () => {
                         </div>
                     )}
                     {(fileData?.data !== undefined) && (
-                        <SearchBar searchText={searchText} onTextChange={onTextChange} onClickSearch={onClickSearch} tags={tags} onTagClick={onTagClick} fileDataHighLight={fileDataHighLight} />
+                        <SearchBar searchText={searchText} showTagHandler={showTagHandler} onTextChange={onTextChange} onClickSearch={onClickSearch} tags={tags} onTagClick={onTagClick} fileDataHighLight={fileDataHighLight} />
                     )}
                 </div>
             </div>

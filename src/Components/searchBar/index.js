@@ -7,13 +7,17 @@ const SearchBar = (props) => {
         tags,
         onTagClick,
         searchText,
-        fileDataHighLight
+        fileDataHighLight,
+        showTagHandler
     } = props
 
     const [tagView, setTagView] = useState(true);
 
     return (
-        <div className="flex flex-col h-screen bg-sideBG">
+        <div className="flex flex-col h-screen bg-sideBG overflow-auto px-5">
+            <div className="mx-auto pt-5">
+                <input type="checkbox" id="tags" name="showTags" onChange={showTagHandler} /> Show Tags
+            </div>
             <div className="h-32 py-10 px-5 flex flex-row">
                 <input value={searchText} className="rounded-l-lg p-2" type="text" placeholder="Search" onChange={onTextChange} />
                 <button onClick={onClickSearch} className="w-auto flex justify-end items-center text-Navy p-2 hover:text-black bg-viewBG rounded-r-lg">
@@ -42,7 +46,7 @@ const SearchBar = (props) => {
                         {tagView && (
                             <>
                                 {tags.map((item) => {
-                                    return (<button key={item.id} className="px-10 py-3" onClick={onTagClick}>{item.name}</button>)
+                                    return (<button key={item.id} className="px-10 py-3" onClick={() => {onTagClick(item.name)}}>{item.name}</button>)
                                 })}
                             </>
                         )}

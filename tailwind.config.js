@@ -12,7 +12,7 @@ module.exports = {
         topBG:"#C0C9CC",
         rightBG:"#A39D92",
         hoverBG:"#F2F1F0",
-        viewBG:"#A39D92"
+        viewBG:"#FFFDD0"
       },
     },
   },
