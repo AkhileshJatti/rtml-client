@@ -4,7 +4,7 @@ import FileViewMain from './Pages/rtmlMain';
 //, #FAE7A5), powder blue (#B6E1E7)
 function App() {
   return (
-    <div className="font-Lato bg-white h-svh">
+    <div className="font-Lato bg-white h-svh text-lg">
       <FileViewMain />
     </div>
   );
