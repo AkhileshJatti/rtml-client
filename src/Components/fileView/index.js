@@ -11,7 +11,7 @@ const FileView = (props) => {
                     if(typeof (lineItem.str)==="number"){
                         return (<>Please Select a File</>)
                     }
-                    return (lineItem?.str?.split('\n').map((item) => <div id={lineItem?.id} className={lineItem?.highLight ? "bg-blue-100" : "bg-none"}>{item}</div>
+                    return (lineItem?.str?.split('\n').map((item) => <div id={lineItem?.id} className={lineItem?.highLight ? "bg-blue-100 scroll-mt-10" : "bg-none"}>{item}</div>
                     ))
                 })}
             </div>
