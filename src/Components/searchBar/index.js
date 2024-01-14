@@ -12,6 +12,14 @@ const SearchBar = (props) => {
     } = props
 
     const [tagView, setTagView] = useState(true);
+    
+    tags.sort(function (a, b) {
+        if (a.start_positions[0] < b.start_positions[0]) {
+            return 1
+        } else {
+            return 0
+        }
+    })
 
     return (
         <div className="flex flex-col bg-sideBG overflow-auto w-1/3 px-5">
@@ -46,7 +54,7 @@ const SearchBar = (props) => {
                         {tagView && (
                             <>
                                 {tags.map((item) => {
-                                    return (<button key={item.id} className="px-10 py-3" onClick={() => {onTagClick(item.name)}}>{item.name}</button>)
+                                    return (<button key={item.id} className="px-10 py-3" onClick={() => { onTagClick(item) }}>{item.name}</button>)
                                 })}
                             </>
                         )}

@@ -7,14 +7,14 @@ import { deleteFile, getAllFiles, getFileData, setFile } from "../../Service/get
 
 const FileViewMain = () => {
     const [files, setFiles] = useState([]);
-    const [fileData, setFileData] = useState({});
+    const [fileData, setFileData] = useState({ data: "" });
     const [openState, setOpenState] = useState(false);
     const [searchText, setSearchText] = useState("")
     const [tags, setTags] = useState([])
     const [isLoading, setIsLoading] = useState(false)
-    const [fileDataShow, setFileDataShow] = useState([])
-    const [showTag, setShowTag] = useState(false)
+    const [condition, setCondition] = useState(/<.*>/g)
     const [fileDataHighLight, setFileDataHighLight] = useState([])
+    const [fileDataShow, setFileDataShow] = useState()
 
     useEffect(() => {
         const asyncFn = async () => {
@@ -23,27 +23,6 @@ const FileViewMain = () => {
         };
         asyncFn();
     }, [])
-
-    const reStart = /<[^/].*?>/
-    const reEnd = /<\/.*?>/
-
-    useEffect(() => {
-        let tempFileDataShow = []
-        if (Object.keys(fileData).length) {
-            fileData?.data.split("\n").forEach((item, index) => {
-                if (item.trim() !== "") {
-                    if (!showTag) {
-                        if (!reStart.test(item) && !reEnd.test(item)) {
-                            tempFileDataShow.push({ id: index, line: item, highLight: false })
-                        }
-                    } else {
-                        tempFileDataShow.push({ id: index, line: item, highLight: false })
-                    }
-                }
-            })
-        }
-        setFileDataShow(tempFileDataShow)
-    }, [fileData, showTag])
 
     const buttonClick = async (file_name) => {
         setTags([])
@@ -58,6 +37,12 @@ const FileViewMain = () => {
             }
         }
     }
+
+    useEffect(() => {
+        let temp = []
+        temp.push(fileData?.data?.replace(condition, ''))
+        setFileDataShow([{ str: temp[0] }])
+    }, [fileData, condition])
 
     const deleteClick = async (fileName) => {
         setTags([])
@@ -77,43 +62,31 @@ const FileViewMain = () => {
     }
 
     const onClickSearch = () => {
-        setTags(fileData.tags.filter((item) => item.name.includes(searchText)))
+        setTags(fileData.tags.filter((item) => item.name.includes(searchText) && item.pairs.length > 0))
     }
 
-    const onTagClick = (name) => {
-        console.log("clicked",name)
-        const temp = fileData?.data.split("\n");
-        let tempFileDataShow = []
-        let highLightItem = false
-        let tagName = []
-        temp.forEach((item, index) => {
-            if (item.trim() !== "") {
-                if (reStart.test(item)) {
-                    if (item.includes(name)) {
-                        highLightItem = true;
-                        tagName.push({ name: item, id: index + 1 });
-                    }
-                }
-                if (reEnd.test(item)) {
-                    if (item.includes(name)) {
-                        highLightItem = false
-                    }
-                }
-                if (!showTag) {
-                    if (!reStart.test(item) && !reEnd.test(item)) {
-                        tempFileDataShow.push({ id: index + highLightItem, line: item, highLight: highLightItem })
-                    }
-                } else {
-                    tempFileDataShow.push({ id: index + highLightItem, line: item, highLight: highLightItem })
-                }
-            }
-        })
-        setFileDataHighLight(tagName)
-        setFileDataShow(tempFileDataShow)
+    const onTagClick = (tag) => {
+        const fileStr = fileData?.data
+        const startArr = tag.start_positions
+        const endArr = tag.end_positions
+        const startLen = startArr.length
+        let temp = []
+        temp.push({ str: fileStr.substring(0, startArr[0]) })
+        for (let i = 0; i < startLen; i++) {
+            temp.push({ str: fileStr.substring(startArr[i], endArr[i]), highLight: true ,id:i})
+            temp.push({ str: fileStr.substring(endArr[i], startArr[i+1])})
+        }
+        let highLight = temp.filter((item)=>item.highLight)
+        setFileDataHighLight(highLight.map((item)=>({name:tag.name,id:item.id})))
+        setFileDataShow(temp.map((item) => ({ ...item, str: item.str.replace(condition, '') })))
     }
 
     const showTagHandler = (e) => {
-        setShowTag(e.target.checked)
+        if (e.target.checked) {
+            setCondition('')
+        } else (
+            setCondition(/<.*>/g)
+        )
     }
 
     return (
@@ -124,7 +97,7 @@ const FileViewMain = () => {
             <div className="flex flex-row h-[calc(100%-64px)]">
                 <FileSideBar files={files} setFiles={setFiles} buttonClick={buttonClick} openState={openState} setOpenState={setOpenState} deleteClick={deleteClick} />
                 <div className={`flex flex-row ${openState ? 'w-9/12' : 'w-full'}`}>
-                    {!isLoading && (<FileView fileData={fileDataShow} />)}
+                    {!isLoading && (<FileView fileDataShow={fileDataShow} />)}
                     {isLoading && (
                         <div role="status" className="m-auto">
                             <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
