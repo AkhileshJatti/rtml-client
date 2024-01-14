@@ -35,6 +35,7 @@ const FileViewMain = () => {
             if (res.status === 200) {
                 setIsLoading(false)
                 setFileData(res.data)
+                setSelectedTag({})
             }
         }
     }
@@ -46,7 +47,7 @@ const FileViewMain = () => {
         if(Object.keys(selectedTag).length>0){
             onTagClick(selectedTag)
         }
-    }, [fileData, condition])
+    }, [fileData, condition,selectedTag])
 
     const deleteClick = async (fileName) => {
         setTags([])
@@ -84,6 +85,7 @@ const FileViewMain = () => {
         let highLight = temp.filter((item)=>item.highLight)
         setFileDataHighLight(highLight.map((item)=>({name:tag.name,id:item.id})))
         setFileDataShow(temp.map((item) => ({ ...item, str: item.str.replace(condition, '') })))
+        window.location.href = window.location.href.split("/#")[0] + `#0`
     }
 
     const showTagHandler = (e) => {
