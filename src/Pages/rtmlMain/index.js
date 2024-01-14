@@ -15,6 +15,7 @@ const FileViewMain = () => {
     const [condition, setCondition] = useState(/<.*>/g)
     const [fileDataHighLight, setFileDataHighLight] = useState([])
     const [fileDataShow, setFileDataShow] = useState()
+    const [selectedTag,setSelectedTag] = useState({})
 
     useEffect(() => {
         const asyncFn = async () => {
@@ -42,6 +43,9 @@ const FileViewMain = () => {
         let temp = []
         temp.push(fileData?.data?.replace(condition, ''))
         setFileDataShow([{ str: temp[0] }])
+        if(Object.keys(selectedTag).length>0){
+            onTagClick(selectedTag)
+        }
     }, [fileData, condition])
 
     const deleteClick = async (fileName) => {
@@ -66,6 +70,7 @@ const FileViewMain = () => {
     }
 
     const onTagClick = (tag) => {
+        setSelectedTag(tag)
         const fileStr = fileData?.data
         const startArr = tag.start_positions
         const endArr = tag.end_positions
