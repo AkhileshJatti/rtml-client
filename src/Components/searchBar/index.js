@@ -12,9 +12,9 @@ const SearchBar = (props) => {
     } = props
 
     const [tagView, setTagView] = useState(true);
-    
+
     tags.sort(function (a, b) {
-        if (a.start_positions[0] < b.start_positions[0]) {
+        if (a.start_positions[0] > b.start_positions[0]) {
             return 1
         } else {
             return 0
@@ -28,7 +28,7 @@ const SearchBar = (props) => {
             </div>
             <div className="h-32 py-10 px-5 flex flex-row mx-auto">
                 <input value={searchText} className="rounded-l-lg p-2" type="text" placeholder="Search" onChange={onTextChange} />
-                <button onClick={onClickSearch} className="w-auto flex justify-end items-center text-Navy p-2 hover:text-black bg-viewBG rounded-r-lg">
+                <button onClick={()=>{onClickSearch();setTagView(true)}} className="w-auto flex justify-end items-center text-Navy p-2 hover:text-black bg-viewBG rounded-r-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z">
                         </path>
@@ -54,21 +54,25 @@ const SearchBar = (props) => {
                         {tagView && (
                             <>
                                 {tags.map((item) => {
-                                    return (<button key={item.id} className="px-10 py-3" onClick={() => { onTagClick(item) }}>{item.name}</button>)
+                                    return (<button key={item.id} className="px-10 py-3" onClick={() => { onTagClick(item); setTagView(false) }}>{item.name}</button>)
                                 })}
                             </>
                         )}
                     </div>
                     {fileDataHighLight.length > 0 && (
-                        <div className="overflow-auto flex flex-col gap-4 pt-10 text-center w-auto">
+                        <div className="overflow-auto flex flex-col gap-4 mt-10 bg-blue-100 text-center w-auto">
+                            <div className="px-5 font-black text-xl rounded-md bg-blue-300 relative">
+                                <p className="text-sm py-2">Instances of Selected Tag</p>
+                            </div>
                             {fileDataHighLight.map((item) => (
-                                <button key={item.id} className="w-max m-auto" onClick={() => {
+                                <button key={item.id} className="m-auto" onClick={() => {
                                     window.location.href = window.location.href.split("/#")[0] + `#${item.id}`
                                 }}>
                                     {item.name}
                                 </button>
                             )
                             )}
+
                         </div>
                     )}
                 </div>

@@ -68,6 +68,7 @@ const FileViewMain = () => {
 
     const onClickSearch = () => {
         setTags(fileData.tags.filter((item) => item.name.includes(searchText) && item.pairs.length > 0))
+        setFileDataHighLight([])
     }
 
     const onTagClick = (tag) => {
